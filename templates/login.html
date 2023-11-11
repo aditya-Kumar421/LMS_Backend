@@ -16,6 +16,16 @@ input[type=text], select, textarea {
   margin-bottom: 16px;
   resize: vertical;
 }
+input[type=email], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+  }
 
 input[type=submit] {
   background-color: blue;
@@ -75,11 +85,11 @@ input[type=submit]:hover {
    First name.
 </div>
 <br>
-<label for="name">User name</label>
-<input type="text" id="name" name="name" value ="{{n1}}" placeholder="Enter your name">
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" value ="{{n2}}" placeholder="email123@gmail.com"> 
+<label for="email">Email</label>
+<input type="email" id="email" name="email" placeholder="email123@gmail.com"> 
 
+<label for="password">Password</label>
+<input type="password" id="password" name="password" placeholder="Enter your password">
 
     {% comment %} <input type="submit" value="Submit"> {% endcomment %}
     <button type = "submit">submit</button>
