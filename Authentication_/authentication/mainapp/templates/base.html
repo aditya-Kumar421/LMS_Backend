@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %} {% endblock %}</title>
+        <link href="{% static 'css\base.css\' %}" rel="stylesheet">
+    </head>
+    <body>
+        {% comment %} <nav class="nav">
+            {%if request.user.is_authenticated %}
+            <ul>
+                <li {% if section == "dashboard" %} class="selected" {% endif %}><a class="anc"  href="{% url 'dashboard' %}">Home</a></li>
+                <li><a class="anc"  href="{% url 'about' %}">About</a></li>
+                <li><a class="anc" href="#Contact">Contact</a></li>
+                <li><a id="sign" style="float:right;text-decoration: none;" href="signIn.html">Sign up</a></li>
+                <li><a id="login" style="float:right;text-decoration: none;" href="{% url 'login' %}">Login</a></li>
+            </ul>
+            {% endif %}
+        </nav> {% endcomment %}
+        <div id="header">
+            <span class="logo">EduVerse</span>
+            {%if request.user.is_authenticated %}
+            <ul class="menu">
+                <li {% if section == "dashboard" %} class="selected" {% endif %}><a href="{% url 'dashboard' %}">Dashboard</a></li>
+           </div> 
+           <div id="content">
+            {% block content %} 
+            {% endblock %}
+            </div>
+    </body>
+</html>
