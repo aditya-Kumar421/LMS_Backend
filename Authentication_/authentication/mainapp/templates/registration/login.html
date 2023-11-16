@@ -13,16 +13,15 @@
     </p>
     {% endif %}  
     <div class="login-form">
-        <form action="{% url 'login'%}" method ="post">
-            {{ form.as_p }}
+        <form action="{% url 'login' %}" method ="post">
+            {{ form.as_p }}{% comment %} tal {% endcomment %}
             {% csrf_token %}
-            <input type="hiddden" name="next" value="{{next}}"/>
-            <p>
+             <p>
                 <input type="submit" value="Log-in"/>
             </p>
         </form>
         <p>
-            <a href="#">
+            <a href="{% url 'password_reset' %}">
                 Forget your password?
             </a>
         </p>

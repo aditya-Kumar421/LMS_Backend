@@ -2,9 +2,10 @@
 
 
 {% block title %}Dashboard {% endblock %}
-{% block title %}
+{% block content %}
     <h1>Dashboard</h1>
-    Hello,{{ request.user.email }}
+    Hello,{{ request.user.username }}
     <p>Welcome to your page</p>
-    <a href="{% url 'logoutt' %}">Logout</a>
-    
+    <p>You can change your password <a href="{% url 'password_change' %}">here</a></p>
+    <a href="{% url 'logout' %}">Logout</a>
+{% endblock %}

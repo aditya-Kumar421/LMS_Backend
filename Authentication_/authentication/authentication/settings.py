@@ -125,4 +125,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL='dashboard'
 LOGIN_URL = 'login'
-LOGIN_URL = 'logout'
+LOGOUT_URL = 'logout'
+
+#email for changing password:
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
