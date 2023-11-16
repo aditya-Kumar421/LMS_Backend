@@ -10,7 +10,7 @@
         <div id="header">
             {%if request.user.is_authenticated %}
             <ul class="menu">
-                <li {% if section == "dashboard" %} class="selected" {% endif %}><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li {% if section == "dashboard" %} class="selected" {% endif %}><a href="{% url 'dashboard' %}">My Dashboard</a></li>
            </div>
            {% endif %} 
            <div id="content">

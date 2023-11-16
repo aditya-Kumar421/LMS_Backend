@@ -20,6 +20,13 @@
                 <input type="submit" value="Log-in"/>
             </p>
         </form>
+        <hr>
+        <p>Don't have an account?
+            <a href="{% url 'register' %}">
+                Register here
+            </a>
+        </p>
+        <hr>
         <p>
             <a href="{% url 'password_reset' %}">
                 Forget your password?
