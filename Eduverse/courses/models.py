@@ -34,7 +34,7 @@ class Course(models.Model):
         return self.description[:100]
     
     def get_enrolled_student(self):
-        students= self.user_model().objects.filter(paid_courses=self)
+        students =get_user_model().objects.filter(paid_courses=self)
         return len(students)
     
     def get_total_lectures(self):

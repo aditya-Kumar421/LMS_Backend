@@ -5,7 +5,7 @@ from users.serializers import UserSerializer
 
 
 class CourseDisplaySerializer(ModelSerializer):
-    student_no = serializers.IntegerField(source="get_enrolled_student")
+    student_no = serializers.IntegerField(source='get_enrolled_student')
     author = UserSerializer()
     image_url=serializers.CharField(source="get_absolute_image_url")
 

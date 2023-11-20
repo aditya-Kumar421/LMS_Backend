@@ -7,10 +7,7 @@ from .serializers import CourseDisplaySerializer
 
 # Create your views here.
 class CoursesHomeView(APIView):
-
-
     def get(self, request, *args, **kwargs):
-
         sectors=Sector.objects.order_by("?")[:6]
 
         sector_response=[]
@@ -33,5 +30,4 @@ class CoursesHomeView(APIView):
 
 class CourseDetail(APIView):
     def get(self, request, course_uuid, *args, **kwargs):
-        course=Course.objects.filter(course_uuid=course_uuid)
-
+        course =Course.objects.filter(course_uuid=course_uuid)
