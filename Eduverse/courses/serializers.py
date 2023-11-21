@@ -13,7 +13,6 @@ class CourseDisplaySerializer(ModelSerializer):
         model = Course
         fields = ["course_uuid", "title", "student_no", "author", "price", "image_url"]
 
-
 class CommentSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
