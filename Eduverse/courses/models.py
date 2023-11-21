@@ -16,7 +16,6 @@ class Sector(models.Model):
     def get_image_absolute_url(self):
         return 'http://localhost:8000'+self.sector_image.url
     
-
 class Course(models.Model):
     title=models.CharField(max_length = 250)
     description=models.TextField()
@@ -39,13 +38,13 @@ class Course(models.Model):
     
     def get_total_lectures(self):
         lectures=0
-        for section in self.course_section:
+        for section in self.course_section.all():
             lectures+=len(section.episode.all())
         return lectures
 
     def total_course_length(self):
         length=Decimal(0.0)
-        for section in self.course_section:
+        for section in self.course_section.all():
             for episode in section.episodes.all():
                 length+=episode.length
 
@@ -86,7 +85,6 @@ class Episode(models.Model):
     def save(self, *args, **kwargs):
         self.length=self.get_video_length()
         return super().save(*args, **kwargs)
-
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
