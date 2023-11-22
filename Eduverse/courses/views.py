@@ -1,12 +1,17 @@
-from rest_framework.response import Response
+from .serializers import CourseDisplaySerializer, CourseUnpaidSerializer, CourseListSerailizer, CommentSerializer
+
 from courses.models import Sector, Course
+from users.models import User
+
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import CourseDisplaySerializer, CourseUnpaidSerializer, CourseListSerailizer
+
 from django.http import HttpResponseBadRequest
 from django.db.models import Q
 
-# Create your views here.
+import json
+
 #Dashboard for courses
 class CoursesHomeView(APIView):
     def get(self, request, *args, **kwargs):
@@ -64,7 +69,38 @@ class SectorCourse(APIView):
     
 #Search bar for courses:
 class SearchCourse(APIView):
+
     def get(self, request, search_term):
         matches=Course.objects.filter(Q(title__icontains=search_term)| Q(description__icontains=search_term))
         serializer=CourseListSerailizer(matches, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+#Comment section in detail of course:
+class AddComment(APIView):
+    def post(self, request, course_uuid):
+        try:
+            course = Course.objects.get(course_uuid=course_uuid)
+        except Course.DoesNotExist:
+            return HttpResponseBadRequest('Course does not exist')
+
+        try:
+            content = json.loads(request.body)   
+            
+        except json.decoder.JSONDecodeError:
+            return Response("Please a json body", status= status.HTTP_400_BAD_REQUEST)
+
+        if not content.get('message'):
+            return Response(status= status.HTTP_400_BAD_REQUEST)
+        
+        serializer=CommentSerializer(data=content)
+
+        if serializer.is_valid():
+            author=User.objects.get(id=1)
+            comment = serializer.save(user = author)
+            # comment = serializer.save(user = request.user)
+            course.comments.add(comment)
+            return Response(status=status.HTTP_201_CREATED )
+        else:
+            return Response(data=serializer.errors,status =status.HTTP_400_BAD_REQUEST)
+
+

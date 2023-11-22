@@ -2,7 +2,7 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        ".",
+        "./Eduverse",
         "-p",
         "*test.py"
     ],
