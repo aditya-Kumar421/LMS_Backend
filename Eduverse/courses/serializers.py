@@ -29,6 +29,16 @@ class EpisodeUnpaidSerializer(ModelSerializer):
             'file'
         ]
 
+class EpisodePaidSerializer(ModelSerializer):
+    length=serializers.CharField(source='get_video_length_time')
+    class Meta:
+        model=Episode
+        fields=[
+            'file',
+            'length',
+            'title',
+        ]
+
 class CourseSectionUnPaidSerializer(ModelSerializer):
     episodes=EpisodeUnpaidSerializer(many=True)
     total_duration=serializers.CharField(source='total_length')
@@ -40,10 +50,35 @@ class CourseSectionUnPaidSerializer(ModelSerializer):
             'total_duration',
         ]
 
+class CourseSectionPaidSerializer(ModelSerializer):
+    episodes=EpisodePaidSerializer(many=True)
+    total_duration=serializers.CharField(source='total_length')
+    class Meta:
+        model=CourseSection
+        fields=[
+            'section_title',
+            'episodes',
+            'total_duration',
+        ]
+    
 class CourseUnpaidSerializer(ModelSerializer):
     comments=CommentSerializer(many=True)
     author = UserSerializer()
     course_section=CourseSectionUnPaidSerializer(many=True)
+    student_no=serializers.IntegerField(source='get_enrolled_student')
+    total_lectures=serializers.IntegerField(source='get_total_lectures')
+    total_duration=serializers.CharField(source='total_course_length')
+    image_url=serializers.CharField(source='get_absolute_image_url')
+    class Meta:
+        model=Course
+        exclude=[
+            'id'
+        ]
+
+class CoursePaidSerializer(ModelSerializer):
+    comments=CommentSerializer(many=True)
+    author = UserSerializer()
+    course_section=CourseSectionPaidSerializer(many=True)
     student_no=serializers.IntegerField(source='get_enrolled_student')
     total_lectures=serializers.IntegerField(source='get_total_lectures')
     total_duration=serializers.CharField(source='total_course_length')
@@ -72,3 +107,18 @@ class CourseListSerailizer(ModelSerializer):
             'description',
             'total_lectures'
         ]
+
+class CartItemserializer(ModelSerializer):
+    author=UserSerializer()
+    image_url = serializers.CharField(source='get_absolute_image_url')
+    
+    class Meta:
+        model = Course
+        fields = [
+            'author',
+            'title',
+            'price',
+            'image_url'
+        ]
+
+

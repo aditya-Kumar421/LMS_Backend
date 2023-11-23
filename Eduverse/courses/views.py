@@ -1,4 +1,4 @@
-from .serializers import CourseDisplaySerializer, CourseUnpaidSerializer, CourseListSerailizer, CommentSerializer
+from .serializers import CourseDisplaySerializer, CourseUnpaidSerializer, CourseListSerailizer, CommentSerializer, CartItemserializer,CoursePaidSerializer
 
 from courses.models import Sector, Course
 from users.models import User
@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed
 from django.db.models import Q
 
 import json
+from decimal import Decimal
 
 #Dashboard for courses
 class CoursesHomeView(APIView):
@@ -103,4 +104,55 @@ class AddComment(APIView):
         else:
             return Response(data=serializer.errors,status =status.HTTP_400_BAD_REQUEST)
 
+#adding to cart courses:
+class GetCartDetail(APIView):
 
+    def post(self, request):
+        try:
+            body = json.loads(request.body)
+        except json.decoder.JSONDecodeError:
+            return HttpResponseBadRequest()
+
+        if type(body.get('cart')) != list:
+            return HttpResponseBadRequest()
+
+        if len(body.get('cart')) == 0:
+            return Response([])
+
+        courses = []
+        for uuid in body.get('cart'):
+            item = Course.objects.filter(course_uuid=uuid)
+
+            if not item:
+                return HttpResponseBadRequest()
+
+            courses.append(item[0])
+
+        serializer = CartItemserializer(courses, many = True)
+
+        cart_total = Decimal(0.00)
+        for item in serializer.data:
+            cart_total+=Decimal(item.get('price'))
+
+        return Response(data={
+            'cart_detail':serializer.data,
+            'cart_total':cart_total
+        }, status = status.HTTP_200_OK)
+
+#Access to purchased courses:
+class CourseStudy(APIView):
+    def get(self,request, course_uuid ):
+        try:
+            course=Course.objects.get(course_uuid=course_uuid)
+        except Course.DoesNotExist:
+            return HttpResponseBadRequest('course Does not exist')
+
+        request.user = User.objects.get(id=1)
+        user_course = request.user.paid_courses.filter(course_uuid=course_uuid)
+        if not user_course:
+            return HttpResponseNotAllowed('User does not own this course')
+
+        serializer= CoursePaidSerializer(course)
+
+        return Response(serializer.data, status = status.HTTP_200_OK)
+        
